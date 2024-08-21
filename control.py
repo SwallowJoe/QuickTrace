@@ -36,7 +36,7 @@ class Controller:
     def syncCommand(self, config_path: str):
         print(f'sync command {config_path}')
         config_content = read_file(config_path)
-        print(f'config_content={config_content}')
+        # print(f'config_content={config_content}')
         self.commandGenerator.syncCommand(config_content)
         self.onUiInit()
 
@@ -68,14 +68,15 @@ class Controller:
         self.updateDeviceList()
         self.updateConfigList()
     def onCommonUiInit(self):
-        # print("onCommonUiInit")
+        # print(f'onCommonUiInit {self.model.recordingMode.get()}, {self.model.memoryBufferSize.get()}')
 
-        if self.model.recordingMode == 1:
+        if self.model.recordingMode.get() == 1:
             self.ui.tk_radio_button_stopWhenFull.invoke()
-        elif self.model.recordingMode == 2:
+        elif self.model.recordingMode.get() == 2:
             self.ui.tk_radio_button_ringBuffer.invoke()
+
         memory_index = self.model.memoryBufferSize.get().bit_length() - 1
-        # print(f'index={memory_index} memoryBufferSize={self.model.memoryBufferSize.get()}')
+
         self.ui.tk_scale_memoryBufferSize.set(memory_index)
         duration_index = self.model.getRecordDurationIndex()
         self.ui.tk_scale_duration.set(duration_index)

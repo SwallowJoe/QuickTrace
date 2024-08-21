@@ -368,7 +368,7 @@ class RecordSettings:
             # 在每个 buffer 块中匹配 size_kb 和 fill_policy
             size_kb_match = re.search(r'size_kb:\s*(\d+)', block)
             fill_policy_match = re.search(r'fill_policy:\s*(\w+)', block)
-            
+            # print(f'unformat={block} fill_policy_match={fill_policy_match}')
             if size_kb_match and fill_policy_match:
                 size_kb = int(size_kb_match.group(1))
                 fill_policy = fill_policy_match.group(1)
@@ -383,6 +383,7 @@ class RecordSettings:
                     pass
                 
                 # 记录所有 fill_policy
+                # print(f'setFillMode {fill_policy} mode={self.__getFillMode(fill_policy)}')
                 self.setFillMode(self.__getFillMode(fill_policy))
                 
                 buffer_index += 1

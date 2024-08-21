@@ -5,9 +5,9 @@ from tkinter.ttk import *
 class Model:
 
     def __init__(self):
-        self.reset()
+        self.initVar()
         pass
-    def reset(self):
+    def initVar(self):
         # common
         self.__defaultRecordDurations = ['00:00:10','00:00:15','00:00:30',
                                        '00:01:00','00:05:00','00:30:00',
@@ -134,6 +134,75 @@ class Model:
         self.callstackSamplingPrcesses = StringVar()
         # command
         self.commandBuffer = StringVar()
+        pass
+
+    def reset(self):
+        self.recordingMode.set(1) # stopWhenFull
+        self.memoryBufferSize.set(64)
+        self.recordingDuration.set('00:00:10')
+        self.recordProgressBarMax.set(0)
+        self.recordProgressBarCurrent.set(0)
+        # cpu
+        self.enableCpuUsageCounter.set(0)
+        self.cpuUsageCounterInterval.set(1000)
+        self.enableCpuSchedulingDetails.set(0)
+        self.enableCpuFreq.set(0)
+        self.cpuFreqInterval.set(1000)
+        self.enableSyscalls.set(0)
+        # gpu
+        self.enableGpuFreq.set(0)
+        self.enableGpuMemory.set(0)
+        self.enableGpuWorkPeriod.set(0)
+        # power
+        self.enableBatteryDrain.set(0)
+        self.batteryDrainInterval.set(1000)
+        self.enableVoltages.set(0)
+        # memory
+
+        self.enableNativeHeap.set(0)
+        self.nativeHeapProcessCmdlines.set('')
+        self.nativeHeapSamplingInterval.set(0)
+        self.nativeHeapDumpsInterval.set(0)
+        self.nativeHeapDumpPhase.set(0)
+        self.nativeHeapSharedMemory.set(0)
+        self.enableBlockClient.set(0)
+        self.enableAllCustomAllocators.set(0)
+
+        self.enableJavaHeap.set(0)
+        self.javaHeapProcessCmdlines.set('')
+        self.javaHeapDumpsInterval.set(0)
+        self.javaHeapDumpsPhase.set(0)
+
+        self.enableKernelMeminfo.set(0)
+        self.kernelMeminfoInterval.set(0)
+        self.kernelMeminfoCounters.clear()
+        self.kernelMeminfoCountInfo.set('Select counters (0):')
+
+        self.enableHighFreqMemEvents.set(0)
+        self.enableLMK.set(0)
+        self.enablePerPorcessStats.set(0)
+        self.perProcessStatsInterval.set(1000)
+        self.enableVirtualMemStats.set(0)
+
+        # Android Apps
+        self.enableAtraceUserspaceAnnotations.set(0)
+        self.atraceCategories.clear()
+        self.atraceProcesses.set('')
+        self.enableRecordAllApps.set(0)
+
+        self.enableEventLog.set(0)
+        self.eventLogBuffers.clear()
+        self.enableFrameTimeline.set(0)
+        self.enableGameInterventionList.set(0)
+        self.enableNetworkTracing.set(0)
+        self.networkTracingInterval.set(100)
+
+        # Stack Samples
+        self.enableCallstackSampling.set(0)
+        self.callstackSamplingFreq.set(0)
+        self.callstackSamplingPrcesses.set('')
+        # command
+        self.commandBuffer.set('')
         pass
 
     ##### Record Settings #####
