@@ -45,8 +45,18 @@ class Model:
         self.__defaultHeapDumpIntervals = [0, 1000, 10000, 30000, 60000, 300000, 600000, 1800000, 3600000]
         self.__defaultNativeHeapSharedMemBufs = [0, 8192,16384,32768,65536,131072,262144,524288,1048576,67108864,134217728,268435456,536870912]
 
-        self.kernelMeminfoTags = ["active", "active_file", "active_anon", "anon_pages", "buffers", "cached", "cma_free", "cma_total", "commit_limit", "commited_as", "dirty", "gpu", "inactive", "inactive_anon", "inactive_file", "ion_heap", "ion_heap_pool", "kernel_stack", "mapped", "mem_available", "mem_free", "mem_total", "misc", "mlocked", "page_tables", "shmem", "slab", "slab_reclaimable", "slab_unreclaimable", "swap_cached", "swap_free", "swap_total", "unevictable", "vmalloc_chunk", "vmalloc_total", "vmalloc_used", "writeback", "zram"]
-
+        self.kernelMeminfoTags = ["active", "active_file", "active_anon", 
+                                  "anon_pages", "buffers", "cached", "cma_free",
+                                  "cma_total", "commit_limit", "commited_as", "dirty",
+                                  "inactive", "inactive_anon", "inactive_file",
+                                  "kernel_stack", "mapped",
+                                  "mem_available", "mem_free", "mem_total",
+                                  "mlocked", "page_tables", "shmem", "slab", "slab_reclaimable",
+                                  "slab_unreclaimable", "swap_cached", "swap_free", "swap_total",
+                                  "unevictable", "vmalloc_chunk", "vmalloc_total", "vmalloc_used",
+                                  "writeback",
+                                  ]
+                                  # "gpu", "ion_heap", "ion_heap_pool", "misc", "zram",
         self.enableNativeHeap = IntVar()
         self.nativeHeapProcessCmdlines = StringVar()
         self.nativeHeapSamplingInterval = IntVar()

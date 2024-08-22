@@ -12,7 +12,7 @@ class CommandGenerator:
     def __reset(self):
         self.__RecordSettings = RecordSettings()
         self.__LinuxFtrace = LinuxFtrace()
-        self.__LinuxSysStats = LinuxSysStats()
+        self.__LinuxSysStats = LinuxSysStats(self.__model)
         self.__LinuxProcessStats = LinuxProcessStats()
         self.__AndroidPower = AndroidPower()
         self.__AndroidHeapProfd = AndroidHeapProfd()
@@ -43,7 +43,8 @@ class CommandGenerator:
         command += self.__AndroidLog.format()
         command += self.__AndroidFrameTimeline.format()
         command += self.__AndroidGameInterventions.format()
-        command += self.__AndroidNetworkPackets.format()
+        print(f'Unsupport network packets')
+        # command += self.__AndroidNetworkPackets.format()
         command += self.__LinuxPerf.format()
         command += self.__RecordSettings.formatDuration()
 
@@ -505,7 +506,8 @@ class LinuxFtrace:
                 for app in atrace_apps_matches:
                     self.__atrace_apps.append(app)
 class LinuxSysStats:
-    def __init__(self):
+    def __init__(self, model: Model):
+        self.__model = model
         self.__meminfo_period_ms = 0
         self.__stat_period_ms = 0
         self.__cpufreq_period_ms = 0
@@ -537,7 +539,9 @@ class LinuxSysStats:
             model.kernelMeminfoCounters.clear()
             for second, first in self.__sys_stats_configs.items():
                 if first == 'meminfo_counters':
-                    model.kernelMeminfoCounters.append(second)
+                    tag = second.replace("MEMINFO_", "").lower()
+                    if tag in model.kernelMeminfoTags:
+                        model.kernelMeminfoCounters.append(tag)
     def format(self):
         if len(self.__sys_stats_configs) == 0:
             return ''
@@ -596,6 +600,11 @@ class LinuxSysStats:
                     self.setCpuFreqPeriod(int(cpufreq_period_match.group(1)))
 
                 for event, value in event_matches:
+                    if value.startswith("MEMINFO_"):
+                        tag = value.replace("MEMINFO_", "").lower()
+                        if tag not in self.__model.kernelMeminfoTags:
+                            # print(f'e,v={event}, {value}, tag={tag} not in kernelMeminfoTags')
+                            continue
                     self.addEvents(event, value)
 class LinuxProcessStats:
     def __init__(self):
@@ -1115,14 +1124,16 @@ class LinuxPerf:
         config  = f'data_sources: {{\n'
         config += f'    config {{\n'
         config += f'        name: \"linux.perf\"\n'
-        config += f'        timebase  {{\n'
-        config += f'            frequency: {self.__frequency}\n'
-        config += f'            timestamp_clock: PERF_CLOCK_BOOTTIME\n'
-        config += f'        }}\n'
-        config += f'        callstack_sampling {{\n'
-        config += f'            scope {{\n'
+        config += f'        perf_event_config {{\n'
+        config += f'            timebase  {{\n'
+        config += f'                frequency: {self.__frequency}\n'
+        config += f'                timestamp_clock: PERF_CLOCK_BOOTTIME\n'
+        config += f'            }}\n'
+        config += f'            callstack_sampling {{\n'
+        config += f'                scope {{\n'
         for process in self.__processes:
-            config += f'                target_cmdline: \"{process}\"\n'
+            config += f'                    target_cmdline: \"{process}\"\n'
+        config += f'                }}\n'
         config += f'            }}\n'
         config += f'        }}\n'
         config += f'    }}\n'
